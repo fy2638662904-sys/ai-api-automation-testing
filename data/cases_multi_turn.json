@@ -1,0 +1,67 @@
+[
+  {
+    "id": "MT-001",
+    "title": "上下文记忆：能记住上文中的人名",
+    "messages": [
+      { "role": "user", "content": "我的名字叫小明。" },
+      { "role": "assistant", "content": "好的，我记住了，你的名字叫小明。" },
+      { "role": "user", "content": "我叫什么名字？" }
+    ],
+    "content_assert": { "non_empty": true, "contains_all": ["小明"] }
+  },
+  {
+    "id": "MT-002",
+    "title": "无上下文对照：不应凭空知道姓名",
+    "messages": [{ "role": "user", "content": "我叫什么名字？" }],
+    "content_assert": { "non_empty": true, "not_contains_any": ["小明"] }
+  },
+  {
+    "id": "MT-003",
+    "title": "指代切换：从功能测试切到回归测试后不沿用旧指代",
+    "messages": [
+      { "role": "user", "content": "什么是功能测试？" },
+      { "role": "assistant", "content": "功能测试主要验证软件功能是否符合需求。" },
+      { "role": "user", "content": "它主要验证什么？" },
+      { "role": "assistant", "content": "它验证软件功能是否符合需求。" },
+      { "role": "user", "content": "那回归测试呢？" }
+    ],
+    "content_assert": {
+      "non_empty": true,
+      "contains_any": ["回归", "修改后", "原有功能"]
+    }
+  },
+  {
+    "id": "MT-004",
+    "title": "指令冲突：后一条指令应覆盖前一条",
+    "messages": [
+      { "role": "user", "content": "接下来请全部用英文回答。" },
+      { "role": "assistant", "content": "OK, I will answer in English from now on." },
+      { "role": "user", "content": "不对，请改用中文回答：什么是软件测试？" }
+    ],
+    "content_assert": {
+      "non_empty": true,
+      "contains_any": ["测试", "软件"]
+    },
+    "human_review": "检查最终回答语言是否真正切回中文"
+  },
+  {
+    "id": "MT-005",
+    "title": "长上下文：多轮之后仍遵守最初设定的格式约束",
+    "messages": [
+      { "role": "user", "content": "从现在开始，你的所有回答都只能用一句话，不要换行，不要分点。" },
+      { "role": "assistant", "content": "好的，之后我都用一句话回答。" },
+      { "role": "user", "content": "什么是接口测试？" },
+      { "role": "assistant", "content": "接口测试主要验证系统之间接口的数据交互是否符合要求。" },
+      { "role": "user", "content": "那缺陷是什么？" },
+      { "role": "assistant", "content": "缺陷是软件产品中存在的错误或问题。" },
+      { "role": "user", "content": "再说明一下什么是回归测试？" }
+    ],
+    "content_assert": {
+      "non_empty": true,
+      "no_newline": true,
+      "not_contains_any": ["1.", "2.", "•"],
+      "contains_any": ["回归", "修改", "原有功能"]
+    },
+    "human_review": "检查多轮之后是否仍守住“一句话、不分点”的约束"
+  }
+]

@@ -1,0 +1,110 @@
+[
+  {
+    "id": "API-101",
+    "title": "无效 Token 返回 401",
+    "header_override": { "Authorization": "Bearer invalid-token-for-test" },
+    "messages": [{ "role": "user", "content": "什么是软件测试？" }],
+    "expect_status": 401,
+    "expect_error_type": "authentication_error"
+  },
+  {
+    "id": "API-102",
+    "title": "缺少 messages 返回参数错误",
+    "messages": [{ "role": "user", "content": "什么是软件测试？" }],
+    "drop_keys": ["messages"],
+    "expect_status_in": [400, 422],
+    "expect_error_type": "invalid_request_error",
+    "expect_message_contains": "messages"
+  },
+  {
+    "id": "API-103",
+    "title": "messages 类型错误",
+    "messages": "hello",
+    "expect_status_in": [400, 422],
+    "expect_message_contains": "messages"
+  },
+  {
+    "id": "API-104",
+    "title": "messages 为空数组",
+    "messages": [],
+    "expect_status_in": [400, 422],
+    "expect_message_contains": "messages"
+  },
+  {
+    "id": "API-105",
+    "title": "错误的模型名",
+    "override": { "model": "wrong-model" },
+    "messages": [{ "role": "user", "content": "什么是软件测试？" }],
+    "expect_status_in": [400, 422],
+    "expect_message_contains": "wrong-model"
+  },
+  {
+    "id": "API-106",
+    "title": "content 为空字符串（已知缺陷：未被拒绝）",
+    "messages": [{ "role": "user", "content": "" }],
+    "expect_status_in": [400, 422],
+    "note": "实测返回 200 并生成正常回答，属输入校验宽松，见 AI-BUG-001",
+    "xfail": "输入校验宽松：空 content 返回 200（AI-BUG-001）"
+  },
+  {
+    "id": "API-107",
+    "title": "非法 role 必须被拒绝",
+    "messages": [{ "role": "superuser", "content": "你好" }],
+    "expect_status_in": [400, 422]
+  },
+  {
+    "id": "API-108",
+    "title": "content 类型错误（数字）",
+    "messages": [{ "role": "user", "content": 123 }],
+    "expect_status_in": [400, 422]
+  },
+  {
+    "id": "API-109",
+    "title": "temperature 超出取值范围",
+    "messages": [{ "role": "user", "content": "你好" }],
+    "override": { "temperature": 9 },
+    "expect_status_in": [400, 422]
+  },
+  {
+    "id": "API-110",
+    "title": "特殊字符与 emoji 输入可正常处理",
+    "messages": [
+      {
+        "role": "user",
+        "content": "测试 \"双引号\" '单引号' <tag> & 反斜杠 \\ emoji 😀🔥 结束"
+      }
+    ],
+    "expect_status": 200,
+    "content_assert": { "non_empty": true }
+  },
+  {
+    "id": "API-111",
+    "title": "超长输入（约 3000 字）",
+    "content_repeat": { "text": "软件测试是验证软件是否满足需求的过程。", "times": 150 },
+    "expect_status": 200,
+    "content_assert": { "non_empty": true }
+  },
+  {
+    "id": "API-112",
+    "title": "英文提问可正常回答",
+    "messages": [{ "role": "user", "content": "What is regression testing? Answer in one sentence." }],
+    "expect_status": 200,
+    "content_assert": { "non_empty": true, "regex": "[A-Za-z]{4,}" }
+  },
+  {
+    "id": "API-113",
+    "title": "stream=true 返回流式响应",
+    "messages": [{ "role": "user", "content": "用一句话说明什么是回归测试。" }],
+    "override": { "stream": true },
+    "expect_status": 200,
+    "expect_stream": true
+  },
+  {
+    "id": "API-114",
+    "title": "max_tokens=1 时的截断行为",
+    "messages": [{ "role": "user", "content": "详细介绍软件测试的流程" }],
+    "override": { "max_tokens": 1 },
+    "expect_status": 200,
+    "expect_finish_reason_in": ["length", "stop"]
+  }
+]

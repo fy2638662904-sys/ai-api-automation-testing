@@ -1,0 +1,42 @@
+[
+  {
+    "id": "API-001",
+    "title": "正常问答请求返回标准结构",
+    "prompt": "请用一句话解释什么是软件测试。",
+    "expect_status": 200,
+    "expect_top_keys": ["id", "object", "created", "model", "choices", "usage"],
+    "expect_choice_keys": ["index", "message", "finish_reason"],
+    "expect_finish_reason": "stop"
+  },
+  {
+    "id": "API-002",
+    "title": "usage 字段存在且 total = prompt + completion",
+    "prompt": "什么是软件测试？",
+    "expect_status": 200,
+    "expect_usage_keys": ["prompt_tokens", "completion_tokens", "total_tokens"],
+    "expect_usage_sum": true
+  },
+  {
+    "id": "API-003",
+    "title": "响应 content 为非空字符串",
+    "prompt": "什么是回归测试？请用一句话回答。",
+    "expect_status": 200,
+    "content_assert": {
+      "non_empty": true,
+      "contains_any": ["回归", "修改", "测试"]
+    }
+  },
+  {
+    "id": "API-004",
+    "title": "system 角色生效（限定回答语言为英文）",
+    "messages": [
+      { "role": "system", "content": "You must answer in English only." },
+      { "role": "user", "content": "什么是软件测试？" }
+    ],
+    "expect_status": 200,
+    "content_assert": {
+      "non_empty": true,
+      "regex": "[A-Za-z]{3,}"
+    }
+  }
+]

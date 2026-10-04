@@ -1,0 +1,115 @@
+[
+  {
+    "id": "QUAL-001",
+    "title": "主题相关性：回答必须围绕软件测试",
+    "prompt": "请用一句话解释什么是软件测试。",
+    "content_assert": {
+      "non_empty": true,
+      "contains_any": ["软件测试", "测试", "缺陷", "质量"]
+    }
+  },
+  {
+    "id": "QUAL-002",
+    "title": "长度约束：不超过 100 字",
+    "prompt": "什么是软件测试？请用一句话回答，不超过 100 个字。",
+    "content_assert": { "non_empty": true, "max_len": 100 }
+  },
+  {
+    "id": "QUAL-003",
+    "title": "格式约束：一句话、不换行、不分点",
+    "prompt": "什么是软件测试？请严格用一句话回答，不要分点，不要换行。",
+    "content_assert": {
+      "non_empty": true,
+      "no_newline": true,
+      "not_contains_any": ["1.", "2.", "3.", "•"]
+    }
+  },
+  {
+    "id": "QUAL-004",
+    "title": "指令遵循：只给定义，不举例、不介绍方法",
+    "prompt": "请回答“什么是软件测试”。要求：1. 只回答定义；2. 不要解释作用；3. 不要举例；4. 不要介绍方法。",
+    "content_assert": {
+      "non_empty": true,
+      "not_contains_any": ["例如", "功能测试", "提高软件质量"]
+    }
+  },
+  {
+    "id": "QUAL-005",
+    "title": "输出稳定性：同一提问连续 3 次均有效",
+    "prompt": "请用一句话解释什么是软件测试。",
+    "repeat": 3,
+    "content_assert": {
+      "non_empty": true,
+      "contains_any": ["软件测试", "测试", "缺陷", "质量"]
+    }
+  },
+  {
+    "id": "QUAL-006",
+    "title": "不跑题：不应出现无关领域关键词",
+    "prompt": "请用一句话解释什么是软件测试。",
+    "content_assert": {
+      "non_empty": true,
+      "not_contains_any": ["Python", "Java", "股票", "天气"]
+    }
+  },
+  {
+    "id": "QUAL-007",
+    "title": "幻觉：虚构工具应明确无法确认，且不编造网址",
+    "prompt": "请告诉我“TestMaster Quantum X”这个软件测试工具的官方网站、开发公司和主要功能。如果你无法确认它真实存在，请明确说明，不要编造。",
+    "content_assert": {
+      "non_empty": true,
+      "contains_any": ["无法确认", "无法确定", "不存在", "不确定", "无法提供", "没有可靠"],
+      "not_contains_any": ["https://", "www."]
+    }
+  },
+  {
+    "id": "QUAL-008",
+    "title": "语义边界：区分软件测试与软件开发",
+    "prompt": "软件测试和软件开发有什么区别？请简要说明。",
+    "content_assert": {
+      "non_empty": true,
+      "contains_all": ["测试", "开发"]
+    }
+  },
+  {
+    "id": "QUAL-009",
+    "title": "模糊提问：应给出与测试相关的合理回答",
+    "prompt": "测试是什么？",
+    "content_assert": {
+      "non_empty": true,
+      "contains_any": ["软件测试", "测试", "质量", "缺陷"]
+    }
+  },
+  {
+    "id": "QUAL-010",
+    "title": "不知道就拒答：虚构的内部业务数据",
+    "prompt": "请告诉我我们公司 2026 年第三季度的测试用例通过率是多少，要具体数字。",
+    "content_assert": {
+      "non_empty": true,
+      "contains_any": ["无法", "不知道", "不清楚", "没有", "不掌握", "不能提供"],
+      "not_contains_any": ["通过率是", "95%", "98%", "92%"]
+    }
+  },
+  {
+    "id": "QUAL-011",
+    "title": "综合输出质量：多条约束同时满足",
+    "prompt": "请解释什么是软件测试。要求：1. 面向零基础用户；2. 用两句话回答；3. 不要举例；4. 不要分点；5. 不要换行。",
+    "content_assert": {
+      "non_empty": true,
+      "contains_any": ["软件测试", "测试"],
+      "no_newline": true,
+      "not_contains_any": ["例如", "1.", "2."],
+      "max_len": 150
+    }
+  },
+  {
+    "id": "QUAL-012",
+    "title": "事实准确性：经典定义不得篡改",
+    "prompt": "回归测试的目的是什么？请用一句话回答。",
+    "content_assert": {
+      "non_empty": true,
+      "contains_any": ["修改", "原有功能", "回归"],
+      "not_contains_any": ["验证软件是否符合需求规格书", "首次开发"]
+    }
+  }
+]
